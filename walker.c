@@ -1,5 +1,4 @@
 #include "walker.h"
-#include <stdlib.h>
 
 void make_nextgame(char **field, struct Position *player, struct Position *end)
 {
