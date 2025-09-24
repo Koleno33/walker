@@ -21,16 +21,16 @@
 struct Position
 {
   /* position from -(FIELD_SIZE/2)  to +(FIELD_SIZE/2)  */
-	int x;
+  int x;
   int y;
 };
 
 enum PlayerDirection
 {
-	UP    = 'w',
-	LEFT  = 'a',
-	DOWN  = 's',
-	RIGHT = 'd'
+  UP    = 'w',
+  LEFT  = 'a',
+  DOWN  = 's',
+  RIGHT = 'd'
 };
 
 void fill_field(wchar_t **field, struct Position *player, struct Position *end);
