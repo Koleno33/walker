@@ -40,11 +40,9 @@ void fill_field(wchar_t **field, struct Position *player, struct Position *end)
 {
   wchar_t *temp_symb_ptr = NULL;
   int     i, j, next_x_index, next_y_index;
-  char    placed = 0;
 
   /* make top wall */
   for (i = 0; i < FIELD_SIZE; ++i) {
-    field[i] = malloc((FIELD_SIZE + 1) * sizeof(**field));
     field[i][FIELD_SIZE] = '\0';
     field[0][i] = WALL_SYMBOL;
   }
@@ -63,19 +61,12 @@ void fill_field(wchar_t **field, struct Position *player, struct Position *end)
 
   /* make other walls */
   for (i = WALLS_STEP; i < FIELD_SIZE - 2; i += WALLS_STEP) {
-    /* horizontal */
     for (j = 1; j < FIELD_SIZE - 1; ++j) {
-      if (!placed && rand() % WALL_CHANCE == 0) {
-        field[i][j] = EMPTY_SYMBOL;
-        placed = 1;
-      } 
-      else {
-        field[i][j] = WALL_SYMBOL;
-      }
+      /* horizontal */
+      field[i][j] = WALL_SYMBOL;
+      /* vertical */
+      field[j][i] = WALL_SYMBOL;
     }
-    if (!placed) 
-      field[i][FIELD_SIZE - 2] = EMPTY_SYMBOL;
-    placed = 0;
   }
 
   /* make hero */
@@ -193,6 +184,9 @@ int main(void)
   end.x = FIELD_SIZE/2 - 1;
   end.y = FIELD_SIZE/2 - 1;
 
+
+  for (i = 0; i < FIELD_SIZE; ++i) 
+   field[i] = malloc((FIELD_SIZE + 1) * sizeof(**field));
   fill_field(field, &player, &end);
 
   for (;;) {
