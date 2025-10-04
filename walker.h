@@ -18,12 +18,12 @@
 #define WALLS_STEP     6
 #define MINES_COUNT    8
 
-struct Position
+typedef struct
 {
   /* position from -(FIELD_SIZE/2)  to +(FIELD_SIZE/2)  */
   int x;
   int y;
-};
+} Position;
 
 enum PlayerDirection
 {
@@ -33,10 +33,17 @@ enum PlayerDirection
   RIGHT = 'd'
 };
 
-void fill_field(wchar_t **field, struct Position *player, struct Position *end);
-void free_field(wchar_t **field);
-void move_player(wchar_t **field, struct Position *player, enum PlayerDirection direction, struct Position *end);
-void make_nextgame(wchar_t **field, struct Position *player, struct Position *end);
-void make_defeat(wchar_t **field, struct Position *player, struct Position *end);
+typedef struct
+{ 
+  Position  *playerpos;
+  Position  *endpos;
+  wchar_t  **field;
+} Game;
+
+void fill_field(Game *game);
+void free_field(Game *game);
+void move_player(Game *game, enum PlayerDirection direction);
+void make_nextgame(Game *game);
+void make_defeat(Game *game);
 
 #endif
