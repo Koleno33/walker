@@ -43,7 +43,7 @@ void fill_field(Game *game)
 
   /* make top wall */
   for (i = 0; i < FIELD_SIZE; ++i) {
-    game->field[i][FIELD_SIZE] = '\0';
+    game->field[i][FIELD_SIZE] = L'\0';
     game->field[0][i] = WALL_SYMBOL;
   }
 
@@ -93,6 +93,58 @@ void fill_field(Game *game)
     }
   }
 
+  make_doors(game);
+}
+
+void make_doors(Game *game)
+{
+  int hole_placed = 0;
+  int i, j;
+
+  /* amount of holes if go horizontally or vertically*/
+  int holesh = 0; 
+  int holesv = 0;
+
+  /* is door placed in horizontal direction or no */
+  int is_hor = 0;
+
+  for (i = 0; i < WAY_LENGTH; ++i) {
+    is_hor = rand() % 2;
+    if ((holesh < (WAY_LENGTH / 2) && (is_hor || holesv >= (WAY_LENGTH / 2)))) {
+      /* horizontal */
+      for (j = (holesv) * WALLS_STEP + 1; j < (holesv + 1) * WALLS_STEP - 1; ++j) {
+        if (rand() % WALL_CHANCE == 0) {
+          game->field[j][(holesh + 1) * WALLS_STEP] = EMPTY_SYMBOL;
+          hole_placed = 1;
+          break;
+        }
+      }
+
+      if (!hole_placed) {
+        game->field[j][(holesh + 1) * WALLS_STEP] = EMPTY_SYMBOL;
+      }
+
+      ++holesh;
+    }
+    else {
+      /* vertical */
+      for (j = (holesh) * WALLS_STEP + 1; j < (holesh + 1) * WALLS_STEP - 1; ++j) {
+        if (rand() % WALL_CHANCE == 0) {
+          game->field[(holesv + 1) * WALLS_STEP][j] = EMPTY_SYMBOL;
+          hole_placed = 1;
+          break;
+        }
+      }
+
+      if (!hole_placed) {
+        game->field[(holesv + 1) * WALLS_STEP][j] = EMPTY_SYMBOL;
+      }
+
+      ++holesv;
+    }
+
+    hole_placed = 0;
+  }
 }
 
 void free_field(Game *game)
