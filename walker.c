@@ -75,8 +75,6 @@ void fill_field(Game *game)
   /* make end */
   game->field[game->endpos->y + FIELD_SIZE/2][game->endpos->x + FIELD_SIZE/2] = END_SYMBOL;
 
-  make_doors(game);
-
   /* make mines */
   i = 0;
   while (i < MINES_COUNT) {
@@ -88,29 +86,6 @@ void fill_field(Game *game)
     next_y_index = 2 + rand() % (FIELD_SIZE - 2);
     if (next_y_index % WALLS_STEP == 0) continue;
 
-    /* checking for door around vertically and horizontally */
-    /* door has 'WDW' pattern (Wall Door) */
-    if (game->field[next_y_index - 1][next_x_index - 1] == WALL_SYMBOL) {
-      if (game->field[next_y_index][next_x_index - 1] == EMPTY_SYMBOL || 
-          game->field[next_y_index - 1][next_x_index] == EMPTY_SYMBOL) {
-        continue;
-      }
-    }
-
-    /*          W                     */
-    /* door has D pattern (Wall Door) */
-    /*          W                     */
-    if (game->field[next_y_index + 1][next_x_index - 1] == WALL_SYMBOL) {
-      if (game->field[next_y_index + 1][next_x_index] == EMPTY_SYMBOL || 
-          game->field[next_y_index][next_x_index - 1] == EMPTY_SYMBOL) {
-        continue;
-      }
-    } else if (game->field[next_y_index + 1][next_x_index + 1] == WALL_SYMBOL) {
-      if (game->field[next_y_index][next_x_index + 1] == EMPTY_SYMBOL) {
-        continue;
-      }
-    }
-
     temp_symb_ptr = &game->field[next_y_index][next_x_index];
     if (*temp_symb_ptr != WALL_SYMBOL) {
       *temp_symb_ptr = MINE_SYMBOL;
@@ -118,6 +93,7 @@ void fill_field(Game *game)
     }
   }
 
+  make_doors(game);
 }
 
 void make_doors(Game *game)
