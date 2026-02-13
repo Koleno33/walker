@@ -1,4 +1,4 @@
 .PHONY: make
 make:
-	gcc walker.c -Wall -g -lncurses
+	gcc main.c game.c -Wall -g -lncurses
 
