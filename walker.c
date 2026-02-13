@@ -87,7 +87,7 @@ void fill_field(Game *game)
     if (next_y_index % WALLS_STEP == 0) continue;
 
     temp_symb_ptr = &game->field[next_y_index][next_x_index];
-    if (*temp_symb_ptr != WALL_SYMBOL) {
+    if (*temp_symb_ptr != WALL_SYMBOL && *temp_symb_ptr != END_SYMBOL) {
       *temp_symb_ptr = MINE_SYMBOL;
       ++i;
     }
@@ -113,6 +113,11 @@ void make_doors(Game *game)
     if ((holesh < (WAY_LENGTH / 2) && (is_hor || holesv >= (WAY_LENGTH / 2)))) {
       /* horizontal */
       for (j = (holesv) * WALLS_STEP + 1; j < (holesv + 1) * WALLS_STEP - 1; ++j) {
+        if ( game->field[j][(holesh + 1) * WALLS_STEP - 1] == MINE_SYMBOL || 
+             game->field[j][(holesh + 1) * WALLS_STEP + 1] == MINE_SYMBOL ) {
+          continue;
+        }
+
         if (rand() % WALL_CHANCE == 0) {
           game->field[j][(holesh + 1) * WALLS_STEP] = EMPTY_SYMBOL;
           hole_placed = 1;
@@ -122,6 +127,13 @@ void make_doors(Game *game)
 
       if (!hole_placed) {
         game->field[j][(holesh + 1) * WALLS_STEP] = EMPTY_SYMBOL;
+
+        if (game->field[j][(holesh + 1) * WALLS_STEP - 1] == MINE_SYMBOL) {
+          game->field[j][(holesh + 1) * WALLS_STEP - 1] = EMPTY_SYMBOL;
+        }
+        if (game->field[j][(holesh + 1) * WALLS_STEP + 1] == MINE_SYMBOL) {
+          game->field[j][(holesh + 1) * WALLS_STEP + 1] = EMPTY_SYMBOL;
+        }
       }
 
       ++holesh;
@@ -129,6 +141,11 @@ void make_doors(Game *game)
     else {
       /* vertical */
       for (j = (holesh) * WALLS_STEP + 1; j < (holesh + 1) * WALLS_STEP - 1; ++j) {
+        if ( game->field[(holesv + 1) * WALLS_STEP - 1][j] == MINE_SYMBOL || 
+             game->field[(holesv + 1) * WALLS_STEP + 1][j] == MINE_SYMBOL ) {
+          continue;
+        }
+
         if (rand() % WALL_CHANCE == 0) {
           game->field[(holesv + 1) * WALLS_STEP][j] = EMPTY_SYMBOL;
           hole_placed = 1;
@@ -138,6 +155,13 @@ void make_doors(Game *game)
 
       if (!hole_placed) {
         game->field[(holesv + 1) * WALLS_STEP][j] = EMPTY_SYMBOL;
+
+        if (game->field[(holesv + 1) * WALLS_STEP - 1][j] == MINE_SYMBOL) {
+          game->field[(holesv + 1) * WALLS_STEP - 1][j] = EMPTY_SYMBOL;
+        }
+        if (game->field[(holesv + 1) * WALLS_STEP + 1][j] == MINE_SYMBOL) {
+          game->field[(holesv + 1) * WALLS_STEP + 1][j] = EMPTY_SYMBOL;
+        }
       }
 
       ++holesv;
