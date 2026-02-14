@@ -94,6 +94,7 @@ void fill_field(Game *game)
   }
 
   make_doors(game);
+  add_doors(game);
 }
 
 void make_doors(Game *game)
@@ -168,6 +169,59 @@ void make_doors(Game *game)
     }
 
     hole_placed = 0;
+  }
+}
+
+
+void add_doors(Game *game)
+{
+  int i, j;
+  int hole_shift, room_start;
+
+  /* for horizontal walls */
+  for (i = WALLS_STEP; i < FIELD_SIZE - WALLS_STEP; i += WALLS_STEP) {
+    room_start = 0;
+    for (j = 1; j < FIELD_SIZE; ++j) {
+      if (j % WALLS_STEP == 0) {
+        hole_shift = 1 + rand() % (WALLS_STEP - 1);
+        if (rand() % ADD_WALL_CHANCE == 0) {
+          if (room_start + hole_shift >= FIELD_SIZE - 1) {
+            break;
+          }
+          game->field[i][room_start + hole_shift] = EMPTY_SYMBOL;
+        }
+        room_start = j;
+      }
+
+      if (game->field[i][j] == EMPTY_SYMBOL) {
+        /* hole found */
+        j = room_start + WALLS_STEP; 
+        room_start = j;
+      }
+    }
+  }
+
+  /* for vertical walls */
+  for (i = WALLS_STEP; i < FIELD_SIZE - WALLS_STEP; i += WALLS_STEP) {
+    room_start = 0;
+    for (j = 1; j < FIELD_SIZE; ++j) {
+      if (j % WALLS_STEP == 0) {
+        hole_shift = 1 + rand() % (WALLS_STEP - 1);
+        if (rand() % ADD_WALL_CHANCE == 0) {
+          if (room_start + hole_shift >= FIELD_SIZE - 1) {
+            break;
+          }
+          game->field[room_start + hole_shift][i] = EMPTY_SYMBOL;
+        }
+        room_start = j;
+      }
+
+      if (game->field[j][i] == EMPTY_SYMBOL) {
+        /* hole found */
+        j = room_start + WALLS_STEP; 
+        room_start = j;
+      }
+    }
   }
 }
 
