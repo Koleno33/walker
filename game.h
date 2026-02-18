@@ -42,6 +42,7 @@ typedef struct
   Position  *playerpos;
   Position  *endpos;
   wchar_t  **field;
+  unsigned   player_score;
 } Game;
 
 void fill_field(Game *game);

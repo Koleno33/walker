@@ -11,9 +11,12 @@ void make_nextgame(Game *game)
 
 void make_defeat(Game *game)
 {
-  const char *defeat_msg = "Death has overtaken you...";
-  const char *hint_msg   = "Press any key to try again.";
+  const static char *defeat_msg  = "Death has overtaken you...";
+  const static char *hint_msg    = "Press any key to try again.";
+  const        char *score_msg   = "Your score: ";
   int max_y, max_x, start_y, start_x;
+
+  const int score_shift = (strlen(hint_msg) - strlen(score_msg)) / 2;
 
   getmaxyx(stdscr, max_y, max_x);
   if (strlen(hint_msg) > max_x) {
@@ -27,8 +30,11 @@ void make_defeat(Game *game)
 
   clear();
 
-  mvprintw(start_y,     start_x, "%s", defeat_msg);
-  mvprintw(start_y + 1, start_x, "%s", hint_msg);
+  mvprintw(start_y,     start_x,               "%s",    defeat_msg);
+  mvprintw(start_y + 1, start_x + score_shift, "%s%d",  score_msg, game->player_score);
+  mvprintw(start_y + 2, start_x,               "%s",    hint_msg);
+
+  game->player_score = 0;
 
   refresh();
   getch();
@@ -274,6 +280,7 @@ void move_player(Game *game, enum PlayerDirection direction)
 
   /* end check */
   if (game->field[game->playerpos->y + FIELD_SIZE/2][game->playerpos->x + FIELD_SIZE/2] == END_SYMBOL) {
+    ++game->player_score;
     make_nextgame(game);
     return;
   }
